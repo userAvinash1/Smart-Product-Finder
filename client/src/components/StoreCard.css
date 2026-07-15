@@ -1,0 +1,47 @@
+.store-card {
+  cursor: pointer;
+  background: #fff;
+  border-radius: 12px;
+  border-left: 6px solid #1976d2;
+  padding: 18px;
+  margin: 16px auto;
+  max-width: 650px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  transition: all 0.25s ease;
+}
+
+.store-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.store-name {
+  margin: 0 0 15px;
+  font-size: 28px;
+  color: #222;
+}
+
+.store-detail {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+.store-divider {
+  margin: 18px 0;
+  border: none;
+  border-top: 1px solid #eee;
+}
+
+.store-map-text {
+  color: #1976d2;
+  font-weight: 600;
+  margin: 0;
+}
+
+.store-card.selected {
+  border-left: 6px solid #0d6efd;
+  background: #eef6ff;
+  box-shadow: 0 10px 25px rgba(13, 110, 253, 0.2);
+}

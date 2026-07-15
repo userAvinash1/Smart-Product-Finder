@@ -1,17 +1,20 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
 const axios = require('axios');
-const authRoutes = require('./routes/auth'); // ✅ INCLUDE auth routes
+const authRoutes = require('./routes/auth'); // INCLUDE auth routes
+
+const transporter = require('./utils/mailer');
 
 const app = express();
 const PORT = 5000;
 
-// ✅ Middleware
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// ✅ MySQL connection
+// MySQL connection
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -27,14 +30,14 @@ db.connect((err) => {
   }
 });
 
-// ✅ Mount auth routes
+// Mount auth routes
 app.use('/auth', authRoutes);
 
-// ✅ Product search route
+// Product search route
 app.get('/search', async (req, res) => {
   const searchTerm = req.query.product;
-  const userLat = parseFloat(req.query.latitude);
-  const userLng = parseFloat(req.query.longitude);
+  const userLat = parseFloat(req.query.userLat);
+  const userLng = parseFloat(req.query.userLng);
 
   if (!searchTerm) {
     return res.status(400).json({ error: 'Missing product query parameter' });
@@ -140,7 +143,9 @@ app.get('/search', async (req, res) => {
   });
 });
 
-// ✅ Start server
+
+
+// Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
