@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import axios from "./api/axiosInstance";
 import './App.css';
 import Login from './Login';
 import StoreCard from './components/StoreCard';
 import Map from "./Map"; // Now actually using Map.js
 
 
-const API_BASE = process.env.REACT_APP_API_URL;
+// const API_BASE = process.env.REACT_APP_API_URL;
 
 // import { useNavigate } from 'react-router-dom'; // Keep for future use
 
@@ -75,7 +76,7 @@ function App() {
     setSelectedStore(null);
 
       try {
-        const response = await axios.get(`${API_BASE}/search`, {
+        const response = await axios.get("/search", {
           params: {
             product: query,
             userLat: userLocation.latitude,
@@ -95,6 +96,7 @@ function App() {
         setSearchLoading(false);
       }
   };
+
 
   return (
     <div className="App">
@@ -121,6 +123,7 @@ function App() {
             <button
               onClick={() => {
                 localStorage.removeItem("user");
+                localStorage.removeItem("token");
                 setLoggedInUser(null);
               }}
               style={{
@@ -166,6 +169,8 @@ function App() {
             >
               {searchLoading ? "Searching..." : "Search"}
             </button>
+
+
           </div>
 
           {hasSearched &&

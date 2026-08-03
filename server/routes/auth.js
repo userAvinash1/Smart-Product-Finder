@@ -6,12 +6,12 @@ const db = require('../db'); // Adjust if your DB path is different
 
 const transporter = require('../utils/mailer');
 
-const JWT_SECRET = 'your_jwt_secret_key'; // Move to .env later
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // REGISTER
 router.post('/register', async (req, res) => {
-    const { name, email, password } = req.body;
-    console.log('📥 Registration request:', name, email, password); // Debug
+    const { name, email, password } = req.body; 
+    console.log('Registration request:', name, email); // Debug
 
     try {
         // Check if email already exists
@@ -65,19 +65,29 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Optional: Generate JWT (commented for now)
-        /*
-        const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
-        */
+        //Generate JWT 
+
+        const token = jwt.sign(
+            {
+                userId: user.id,
+                email: user.email,
+            },
+            JWT_SECRET,
+            {
+                expiresIn: '1h',
+            }
+        );
+
+        
 
         // Respond with user info (omit password)
         res.json({
             message: 'Login successful',
+            token,
             user: {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                // token: token // Uncomment if JWT used
             }
         });
 

@@ -6,6 +6,7 @@ const axios = require('axios');
 const authRoutes = require('./routes/auth'); // INCLUDE auth routes
 
 const transporter = require('./utils/mailer');
+const verifyToken = require("./middleware/authMiddleware");
 
 const app = express();
 const PORT = 5000;
@@ -34,7 +35,7 @@ db.connect((err) => {
 app.use('/auth', authRoutes);
 
 // Product search route
-app.get('/search', async (req, res) => {
+app.get('/search', verifyToken, async (req, res) => {
   const searchTerm = req.query.product;
   const userLat = parseFloat(req.query.userLat);
   const userLng = parseFloat(req.query.userLng);
@@ -140,6 +141,12 @@ app.get('/search', async (req, res) => {
       product: externalProduct,
       stores: storeResults
     });
+  });
+});
+
+app.get("/profile", verifyToken, (req, res) => {
+  res.json({
+    user: req.user,
   });
 });
 

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import axios from "./api/axiosInstance";
 import './Login.css';
-const API_BASE = process.env.REACT_APP_API_URL;
+// const API_BASE = process.env.REACT_APP_API_URL;
 
 function Login({ onLoginSuccess }) {
   // const [isRegistering, setIsRegistering] = useState(false);
   
 
-  const [name, setName] = useState('');   // ✅ Added
+  const [name, setName] = useState('');   // Added
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,7 +31,7 @@ function Login({ onLoginSuccess }) {
     const endpoint = isRegistering ? '/auth/register' : '/auth/login';
 
     try {
-      const response = await axios.post(`${API_BASE}${endpoint}`,
+      const response = await axios.post(endpoint,
         isRegistering
           ? {
               name,
@@ -44,7 +45,7 @@ function Login({ onLoginSuccess }) {
       );
 
       if (isRegistering) {
-        setMessage('✅ Successfully registered! Redirecting...');
+        setMessage('Successfully registered! Redirecting...');
 
         // Automatically switch to Login page
 
@@ -59,10 +60,12 @@ function Login({ onLoginSuccess }) {
 
         //setTimeout(() => navigate('/'), 1500); // redirect to homepage
       } else {
-        setMessage('✅ Login successful! Redirecting...');
-        localStorage.setItem('user', JSON.stringify(response.data));
+        setMessage('Login successful! Redirecting...');
+        // localStorage.setItem('user', JSON.stringify(response.data));
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
 
-        // 👉 Notify parent App that login is successful
+        // Notify parent App that login is successful
         if (typeof onLoginSuccess === 'function') {
           onLoginSuccess(response.data.user);
         }
@@ -104,7 +107,7 @@ function Login({ onLoginSuccess }) {
 
     try {
       await axios.post(
-        `${API_BASE}/auth/forgot-password`,
+        "/auth/forgot-password",
         { email }
       );
 
@@ -133,7 +136,7 @@ function Login({ onLoginSuccess }) {
 
     try {
       const response = await axios.post(
-        `${API_BASE}/auth/verify-otp`,
+        "/auth/verify-otp",
         {
           email,
           otp
@@ -176,7 +179,7 @@ function Login({ onLoginSuccess }) {
     try {
 
       await axios.post(
-        `${API_BASE}/auth/reset-password`,
+        "/auth/reset-password",
         {
           email,
           password: newPassword
